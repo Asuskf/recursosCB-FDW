@@ -1,9 +1,60 @@
 ---
-title: "My Website"
+title: "Recursos CB-FDW"
 ---
 
-Hello, Website!
 
-For more information about simple R Markdown websites, please read the documentation at https://bookdown.org/yihui/rmarkdown/rmarkdown-site.html.
+```{r setup, include = FALSE}
+library(ggplot2)
+library(dplyr)
+library(tidyverse)
+library(readxl)
+library(kableExtra)
+library(forcats)
+library(plotly)
 
-Please also note that simple R Markdown sites are _not_ based on **blogdown**. They are probably good for websites with only a few Rmd documents. For larger-scale and more sophisticated websites (such as blogs), you may want to use **blogdown** instead: https://github.com/rstudio/blogdown.
+
+
+recursos_CB_EC <- tibble(read_excel("./data/Recursos digitales del curso básico.xlsx", sheet = "EC", na = "0"))
+
+recursos_CB_HN <- tibble(read_excel("./data/Recursos digitales del curso básico.xlsx", sheet = "HN", na = "0"))
+
+recursos_CB_SV <- tibble(read_excel("./data/Recursos digitales del curso básico.xlsx", sheet = "SV", na = "0"))
+
+
+recursos_CB <- bind_rows(recursos_CB_EC, recursos_CB_HN, recursos_CB_SV)
+recursos_mas_usados = as.data.frame(table(select(recursos_CB, Tipo)))
+recursos_mas_usados <- arrange(recursos_mas_usados, -Freq)
+colnames(recursos_mas_usados) <- c("Recursos", "Frecuencia")
+
+```
+
+<center>
+## Los principales recursos 
+</center>
+
+En base a los datos recopilados con la ayuda de los CTPs de los países: **Ecuador, Honduas y El Salvador** se evidencia que el tipo de recurso más usado por los países son los videos seguido de los recursos de infografía y audio. 
+
+<div style="float: left; width: 75%;">
+```{r, echo = FALSE}
+fig <- recursos_mas_usados %>%
+  mutate(name = fct_reorder(Recursos, Frecuencia)) %>%
+  ggplot( aes(x=name, y=Frecuencia)) +
+  geom_bar(stat="identity", fill="#f68060", alpha=.6, width=.6) +
+  coord_flip() +
+  xlab("Recursos usados") +
+  ylab("Frecuencia")+
+  theme_bw()+
+  theme(plot.title = element_text(hjust = 0.5))
+
+ggplotly(fig)
+```
+</div>
+
+<div style="float: right; width: 25%;">
+
+```{r, echo = FALSE}
+recursos_mas_usados %>%
+  kbl() %>%
+  kable_styling()
+```
+</div>

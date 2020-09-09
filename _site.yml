@@ -1,7 +1,8 @@
-name: "my-website"
+name: "recursos-CB-FDW"
 output_dir: "docs"
 navbar:
   title: "My Website"
+  author: "Asuskf"
   left:
     - text: "Home"
       href: index.html
