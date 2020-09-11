@@ -1,5 +1,5 @@
 ---
-title: "Recursos CB-FDW"
+title: ""
 ---
 
 
@@ -28,20 +28,64 @@ colnames(recursos_mas_usados) <- c("Recursos", "Frecuencia")
 
 ```
 
+</br>
+En base a los datos recopilados con la ayuda de los CTPs de los países: **Ecuador, Honduas y El Salvador** se presentan los siguientes resultados. 
+
+<div style="float: right; width: 100%;">
+
+### Número de recursos por país
+
+<div style="float: left; width: 33.5%;">
 <center>
-## Los principales recursos 
+### Ecuador
+![](images/paises/Ecuador.png)
+
+**
+```{r, echo = FALSE, results='asis'}
+cat(length(recursos_CB_EC[[1]]))
+```
+**
 </center>
+</div>
+<div style="float: right; width: 33%;">
+<center>
+### Honduras
 
-En base a los datos recopilados con la ayuda de los CTPs de los países: **Ecuador, Honduas y El Salvador** se evidencia que el tipo de recurso más usado por los países son los videos seguido de los recursos de infografía y audio. 
+![](images/paises/Honduras.png)
 
-<div style="float: left; width: 75%;">
+**
+```{r, echo = FALSE , results='asis'}
+cat(length(recursos_CB_HN[[1]]))
+```
+**
+</center>
+</div>
+<div style="float: left; width: 33%;">
+<center>
+### El Salvador
+![](images/paises/El_Salvador.png)
+
+**
+```{r, echo = FALSE , results='asis'}
+cat(length(recursos_CB_SV[[1]]))
+```
+**
+</center>
+</div>
+
+
+### Los principales recursos 
+
+
+<div>
+<div style="float: right; width: 75%;">
 ```{r, echo = FALSE}
 fig <- recursos_mas_usados %>%
   mutate(name = fct_reorder(Recursos, Frecuencia)) %>%
-  ggplot( aes(x=name, y=Frecuencia)) +
-  geom_bar(stat="identity", fill="#f68060", alpha=.6, width=.6) +
+  ggplot( aes(x=name, y=Frecuencia, fill=name)) +
+  geom_bar(stat="identity", alpha=.6, width=.6) +
   coord_flip() +
-  xlab("Recursos usados") +
+  xlab("") +
   ylab("Frecuencia")+
   theme_bw()+
   theme(plot.title = element_text(hjust = 0.5))
@@ -50,7 +94,7 @@ ggplotly(fig)
 ```
 </div>
 
-<div style="float: right; width: 25%;">
+<div style="float: left; width: 25%;">
 
 ```{r, echo = FALSE}
 recursos_mas_usados %>%
@@ -58,3 +102,93 @@ recursos_mas_usados %>%
   kable_styling()
 ```
 </div>
+</div>
+
+<div style="float: right; width: 100%;">
+
+### Analizando los principales recursos 
+```{r, echo=FALSE, include = FALSE}
+transformar_variables <- function(dataframe){
+  dataframe$'Experiencia'[dataframe$'Descripción de la experiencia' %in% "Buena"] <- 3
+  dataframe$'Proposito'[dataframe$'Cumplio con su proposito' %in% "SI"] <- 3
+  dataframe$'Dificultad'[dataframe$'Nivel de dificultad' %in% "Alto"] <- 3
+  dataframe$'Dificultad'[dataframe$'Nivel de dificultad' %in% "Bajo"] <- 1
+  return(dataframe)
+}
+
+new_df <- transformar_variables(recursos_CB)[, c("Tipo","Número de comentarios positivos",
+                                                 "Número de comentarios negativos",
+                                                 "Número de audiencia captada",
+                                                 "Experiencia", "Proposito", "Dificultad",
+                                                 "Tema enseñado con el recurso", 'Link al recurso')]
+
+colnames(new_df) <- c("Tipo", "Comentarios_Positivos", "Comentarios_Negativos",
+                                   "Audiencia", "Experiencia", "Proposito", 
+                                   "Dificultad", "Tema", "Link")
+
+data_radial_chart <- new_df%>%
+  group_by(Tipo)%>%
+  summarise(Experiencia=sum(Experiencia),proposito = sum(Proposito), 
+            dificultad = sum(Dificultad), Comentarios_Positivos = sum(Comentarios_Positivos), 
+            Comentarios_Negativos = sum(Comentarios_Negativos), audiencia = sum(Audiencia))
+
+
+data_radial_chart <- data_radial_chart %>% replace(is.na(.), 0)
+
+recursos_top = head(recursos_mas_usados, 3)[1]
+
+data_radial_chart <- data_radial_chart[data_radial_chart$Tipo %in% unlist(recursos_top, use.names = FALSE),]
+max_values = colSums(data_radial_chart[,-1])
+recurso = data_radial_chart[data_radial_chart$Tipo %in% recursos_top[[1]][1],]
+
+names_columns = colnames(recurso[,-1])
+
+rule_of_3 <- function(df_recurso, max_values, list_columns){
+  result <- list()
+  for (val in list_columns){
+    result <- append(result, (df_recurso[val][[1]] *3)/ max_values[val][[1]])
+  }
+  result <- unlist(result) %>% replace(is.na(.), 0)
+  fig <- plot_ly(
+    type = 'scatterpolar',
+    r = result,
+    theta = names_columns,
+    fill = 'toself'
+  )
+  fig <- fig %>% layout(autosize = F, width = 650, height = 450)
+  return(fig)
+}
+
+```
+<div style="float: left; width: 100%;">
+<center>
+### Video
+```{r, echo = FALSE, message=FALSE, warning=FALSE}
+recurso = data_radial_chart[data_radial_chart$Tipo %in% recursos_top[[1]][1],]
+rule_of_3(colSums(recurso[,-1]), max_values, names_columns)
+```
+</center>
+</div>
+<div style="float: right; width: 100%;">
+<center>
+### Audio
+```{r, echo = FALSE, message=FALSE, warning=FALSE}
+recurso = data_radial_chart[data_radial_chart$Tipo %in% recursos_top[[1]][2],]
+rule_of_3(colSums(recurso[,-1]), max_values, names_columns)
+```
+</center>
+</div>
+<div style="float: left; width: 100%;">
+<center>
+### Infografía
+```{r, echo = FALSE, message=FALSE, warning=FALSE}
+recurso = data_radial_chart[data_radial_chart$Tipo %in% recursos_top[[1]][3],]
+rule_of_3(colSums(recurso[,-1]), max_values, names_columns)
+```
+
+</center>
+</div>
+
+</div>
+
+
