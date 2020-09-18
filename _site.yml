@@ -6,5 +6,5 @@ navbar:
   left:
     - text: "Resumen"
       href: index.html
-    - text: "About"
-      href: about.html
+    - text: "Recursos"
+      href: recursos.html

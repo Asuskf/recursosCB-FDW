@@ -1,5 +1,5 @@
 ---
-title: ""
+title: "Recursos"
 ---
 
 
@@ -11,7 +11,11 @@ library(readxl)
 library(kableExtra)
 library(forcats)
 library(plotly)
-
+library(data.tree)
+library(networkD3)
+library(igraph)
+library(networkD3)
+library(htmlwidgets)
 
 
 recursos_CB_EC <- tibble(read_excel("./data/Recursos digitales del curso básico.xlsx", sheet = "EC", na = "0"))
@@ -159,6 +163,9 @@ rule_of_3 <- function(df_recurso, max_values, list_columns){
   return(fig)
 }
 
+temas <- new_df%>% select('Tipo', 'Tema')
+Audio <- filter(temas, Tipo == "Audio")
+
 ```
 <div style="float: left; width: 100%;">
 <center>
@@ -166,6 +173,9 @@ rule_of_3 <- function(df_recurso, max_values, list_columns){
 ```{r, echo = FALSE, message=FALSE, warning=FALSE}
 recurso = data_radial_chart[data_radial_chart$Tipo %in% recursos_top[[1]][1],]
 rule_of_3(colSums(recurso[,-1]), max_values, names_columns)
+recursos <- filter(temas, Tipo == recursos_top[[1]][1])
+simpleNetwork(recursos, Source = 1, linkDistance = 150, charge = -50, fontSize = 10,
+              nodeColour = '#DE9559', opacity = 0.8)
 ```
 </center>
 </div>
@@ -175,6 +185,10 @@ rule_of_3(colSums(recurso[,-1]), max_values, names_columns)
 ```{r, echo = FALSE, message=FALSE, warning=FALSE}
 recurso = data_radial_chart[data_radial_chart$Tipo %in% recursos_top[[1]][2],]
 rule_of_3(colSums(recurso[,-1]), max_values, names_columns)
+recursos <- filter(temas, Tipo == recursos_top[[1]][2])
+simpleNetwork(recursos, Source = 1, linkDistance = 250, charge = -50, fontSize = 10,
+              nodeColour = '#DE9559', opacity = 0.8)
+
 ```
 </center>
 </div>
@@ -184,11 +198,11 @@ rule_of_3(colSums(recurso[,-1]), max_values, names_columns)
 ```{r, echo = FALSE, message=FALSE, warning=FALSE}
 recurso = data_radial_chart[data_radial_chart$Tipo %in% recursos_top[[1]][3],]
 rule_of_3(colSums(recurso[,-1]), max_values, names_columns)
+recursos <- filter(temas, Tipo == recursos_top[[1]][3])
+simpleNetwork(recursos, Source = 1, linkDistance = 250, charge = -50, fontSize = 10,
+              nodeColour = '#DE9559', opacity = 0.8)
 ```
-
 </center>
 </div>
-
 </div>
-
 

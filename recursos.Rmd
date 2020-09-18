@@ -1,0 +1,26 @@
+---
+title: "Repositorios"
+---
+```{r setup, include = FALSE}
+library(DT)
+recursos_CB_EC <- tibble(read_excel("./data/Recursos digitales del curso básico.xlsx", sheet = "EC", na ="0"))
+
+recursos_CB_HN <- tibble(read_excel("./data/Recursos digitales del curso básico.xlsx", sheet = "HN", na ="0"))
+
+recursos_CB_SV <- tibble(read_excel("./data/Recursos digitales del curso básico.xlsx", sheet = "SV", na ="0"))
+
+
+recursos_CB <- bind_rows(recursos_CB_EC, recursos_CB_HN, recursos_CB_SV)
+```
+
+```{r, echo = FALSE, message=FALSE, warning=FALSE}
+data <- recursos_CB%>% select('Tipo','Tema enseñado con el recurso','Link al recurso')
+datatable(
+  data,filter = "top",
+  options = list(dom = 'Pfrtip', columnDefs = list(list(
+    searchPanes = list(show = FALSE), targets = 0:-1
+  ))),
+  extensions = c('Select', 'SearchPanes'),
+  selection = 'none'
+)
+``````

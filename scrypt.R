@@ -5,6 +5,10 @@ library(readxl)
 library(kableExtra)
 library(forcats)
 library(plotly)
+library(data.tree)
+library(networkD3)
+library(igraph)
+library(networkD3)
 
 
 recursos_CB_EC <- tibble(read_excel("./data/Recursos digitales del curso básico.xlsx", sheet = "EC", na = "0"))
@@ -53,7 +57,7 @@ colnames(new_df) <- c("Tipo", "Comentarios_Positivos", "Comentarios_Negativos",
                                    "Audiencia", "Experiencia", "Proposito", 
                                    "Dificultad", "Tema", "Link")
 
-
+table(new_df%>% select(Tema))
 data_radial_chart <- new_df%>%
   group_by(Tipo)%>%
   summarise(Experiencia=sum(Experiencia),proposito = sum(Proposito), 
@@ -98,3 +102,52 @@ fig <- plot_ly(
 
 fig
 
+new_df <- new_df[new_df$Tipo %in% unlist(recursos_top, use.names = FALSE),]
+
+table(new_df %>% select(Tema))
+
+temas_frecuentes = as.data.frame(table(select(new_df, Tema)))
+temas_frecuentes <- arrange(temas_frecuentes, -Freq)
+temas_frecuentes <-head(temas_frecuentes, 3)
+temas_frecuentes
+
+recursos_top[,1][1]
+
+temas <- new_df%>% select('Tipo', 'Tema')
+recursos <- filter(temas, Tipo == recursos_top[[1]][3])
+
+simpleNetwork(recursos, Source = 1, linkDistance = 250, charge = -50, fontSize = 10)
+
+
+nd3 <- ToListExplicit(FromDataFrameNetwork(temas), unname = T)
+diagonalNetwork(List = nd3,fontSize = 25, margin = NULL, opacity = 0.9, )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+data <- recursos_CB%>% select('Tipo','Nombre del recurso', 'Tema enseñado con el recurso', 'Link al recurso')
+datatable(data, filter = "top", class = 'cell-border stripe',options = list(
+  pageLength = 10, autoWidth = TRUE
+))
+
+
+datatable(
+  data,filter = "top",
+  options = list(dom = 'Pfrtip', columnDefs = list(list(
+    searchPanes = list(show = FALSE), targets = 0:-1
+  ))),
+  extensions = c('Select', 'SearchPanes'),
+  selection = 'none'
+)
+iris
