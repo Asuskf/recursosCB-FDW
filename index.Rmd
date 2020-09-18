@@ -175,7 +175,7 @@ recurso = data_radial_chart[data_radial_chart$Tipo %in% recursos_top[[1]][1],]
 rule_of_3(colSums(recurso[,-1]), max_values, names_columns)
 recursos <- filter(temas, Tipo == recursos_top[[1]][1])
 simpleNetwork(recursos, Source = 1, linkDistance = 150, charge = -50, fontSize = 10,
-              nodeColour = '#DE9559', opacity = 0.8)
+              nodeColour = '#DE9559', opacity = 0.8, zoom = T)
 ```
 </center>
 </div>
@@ -187,7 +187,7 @@ recurso = data_radial_chart[data_radial_chart$Tipo %in% recursos_top[[1]][2],]
 rule_of_3(colSums(recurso[,-1]), max_values, names_columns)
 recursos <- filter(temas, Tipo == recursos_top[[1]][2])
 simpleNetwork(recursos, Source = 1, linkDistance = 250, charge = -50, fontSize = 10,
-              nodeColour = '#DE9559', opacity = 0.8)
+              nodeColour = '#DE9559', opacity = 0.8, zoom = T)
 
 ```
 </center>
@@ -200,7 +200,7 @@ recurso = data_radial_chart[data_radial_chart$Tipo %in% recursos_top[[1]][3],]
 rule_of_3(colSums(recurso[,-1]), max_values, names_columns)
 recursos <- filter(temas, Tipo == recursos_top[[1]][3])
 simpleNetwork(recursos, Source = 1, linkDistance = 250, charge = -50, fontSize = 10,
-              nodeColour = '#DE9559', opacity = 0.8)
+              nodeColour = '#DE9559', opacity = 0.8, zoom = T)
 ```
 </center>
 </div>

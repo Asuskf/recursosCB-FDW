@@ -150,4 +150,11 @@ datatable(
   extensions = c('Select', 'SearchPanes'),
   selection = 'none'
 )
-iris
+
+
+tbl <- 
+  tibble::tribble(
+    ~url,
+    '<a href="https://en.wikipedia.org/wiki/">Wikipedia</a>',
+    '<a href="https://ups.com">UPS</a>')
+tbl %>% DT::datatable(escape = FALSE)
