@@ -3,6 +3,7 @@ title: "Repositorios"
 ---
 ```{r setup, include = FALSE}
 library(DT)
+library(comprehenr)
 recursos_CB_EC <- tibble(read_excel("./data/Recursos digitales del curso básico.xlsx", sheet = "EC", na ="0"))
 
 recursos_CB_HN <- tibble(read_excel("./data/Recursos digitales del curso básico.xlsx", sheet = "HN", na ="0"))
@@ -14,13 +15,21 @@ recursos_CB <- bind_rows(recursos_CB_EC, recursos_CB_HN, recursos_CB_SV)
 ```
 
 ```{r, echo = FALSE, message=FALSE, warning=FALSE}
-data <- recursos_CB%>% select('Tipo','Tema enseñado con el recurso','Link al recurso')
+urls <-to_list(for (val in unlist(recursos_CB['Link al recurso'])) 
+  if (is.na(val)) 'Pronto colocaremos la URL' else paste("<a href=",val,">","Ir al recurso","</a>"))
+
+
+recursos_CB$'Link al recurso'=unlist(urls)
+
+data <- recursos_CB%>% select('Tipo','Nombre del recurso', 'Tema enseñado con el recurso', 'Link al recurso')
 datatable(
   data,filter = "top",
   options = list(dom = 'Pfrtip', columnDefs = list(list(
     searchPanes = list(show = FALSE), targets = 0:-1
-  ))),
+  ))),escape = FALSE,
   extensions = c('Select', 'SearchPanes'),
   selection = 'none'
 )
+
+
 ``````

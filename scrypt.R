@@ -9,7 +9,7 @@ library(data.tree)
 library(networkD3)
 library(igraph)
 library(networkD3)
-
+library(comprehenr)
 
 recursos_CB_EC <- tibble(read_excel("./data/Recursos digitales del curso básico.xlsx", sheet = "EC", na = "0"))
 
@@ -133,28 +133,28 @@ diagonalNetwork(List = nd3,fontSize = 25, margin = NULL, opacity = 0.9, )
 
 
 
+recursos_CB_EC <- tibble(read_excel("./data/Recursos digitales del curso básico.xlsx", sheet = "EC", na = "0"))
+
+recursos_CB_HN <- tibble(read_excel("./data/Recursos digitales del curso básico.xlsx", sheet = "HN", na = "0"))
+
+recursos_CB_SV <- tibble(read_excel("./data/Recursos digitales del curso básico.xlsx", sheet = "SV", na = "0"))
 
 
+recursos_CB <- bind_rows(recursos_CB_EC, recursos_CB_HN, recursos_CB_SV)
+
+
+urls <-to_list(for (val in unlist(recursos_CB['Link al recurso'])) if (is.na(val)) 'No tenemos la URL' else paste("<a href=",val,">","Ir al recurso","</a>"))
+
+
+unlist(urls)
+recursos_CB$'Link al recurso'=unlist(urls)
 
 data <- recursos_CB%>% select('Tipo','Nombre del recurso', 'Tema enseñado con el recurso', 'Link al recurso')
-datatable(data, filter = "top", class = 'cell-border stripe',options = list(
-  pageLength = 10, autoWidth = TRUE
-))
-
-
 datatable(
   data,filter = "top",
   options = list(dom = 'Pfrtip', columnDefs = list(list(
     searchPanes = list(show = FALSE), targets = 0:-1
-  ))),
+  ))),escape = FALSE,
   extensions = c('Select', 'SearchPanes'),
   selection = 'none'
 )
-
-
-tbl <- 
-  tibble::tribble(
-    ~url,
-    '<a href="https://en.wikipedia.org/wiki/">Wikipedia</a>',
-    '<a href="https://ups.com">UPS</a>')
-tbl %>% DT::datatable(escape = FALSE)
