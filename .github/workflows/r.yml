@@ -17,12 +17,10 @@ jobs:
     runs-on: macOS-latest
     
     steps:
-      - uses: actions/checkout@v2
-      - name: Set up R 3.5
-        uses: r-lib/actions/setup-r@ffe45a39586f073cc2e9af79c4ba563b657dc6e3
+      - uses: r-lib/actions/setup-r@ffe45a39586f073cc2e9af79c4ba563b657dc6e3
         with:
           r-version: '3.5'
-      - name: Install dependencies
+      - name: Update data
         run: |
           install.packages(c("remotes", "rcmdcheck"))
           remotes::install_deps(dependencies = TRUE)
@@ -31,6 +29,6 @@ jobs:
             url = "https://docs.google.com/spreadsheets/d/1BVxs8O0QpBNz1mdPGFYgV0bLAv3g22QWDDxdsd1XTC4/edit?usp=sharing", 
             destfile = "/data/Recursos digitales del curso básico.xlsx"
           )
+      - uses: actions/checkout@v2    
           
-         
         
