@@ -30,5 +30,10 @@ jobs:
             destfile = "/data/Recursos digitales del curso básico.xlsx"
           )
       - uses: actions/checkout@v2    
-          
+      - run: |
+          git config username asuskf
+          git config user.email kfarinango@protonmail.com
+          git add /data/Recursos digitales del curso básico.xlsx
+          git commit -m "[bot] Actualizando información"
+          git push origin master
         
