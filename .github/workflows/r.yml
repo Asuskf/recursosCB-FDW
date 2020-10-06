@@ -23,8 +23,6 @@ jobs:
           r-version: '3.5'
       - name: Update data
         run: |
-          install.packages(c("remotes", "rcmdcheck"))
-          remotes::install_deps(dependencies = TRUE)
           file.remove("/data/Recursos digitales del curso básico.xlsx")
           download.file(
             url = "https://docs.google.com/spreadsheets/d/1BVxs8O0QpBNz1mdPGFYgV0bLAv3g22QWDDxdsd1XTC4/edit?usp=sharing", 
