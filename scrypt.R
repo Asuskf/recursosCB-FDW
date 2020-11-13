@@ -143,7 +143,7 @@ recursos_CB_SV <- tibble(read_excel("./data/Recursos digitales del curso básico
 recursos_CB <- bind_rows(recursos_CB_EC, recursos_CB_HN, recursos_CB_SV)
 
 
-urls <-to_list(for (val in unlist(recursos_CB['Link al recurso'])) if (is.na(val)) 'No tenemos la URL' else paste("<a href=",val,">","Ir al recurso","</a>"))
+urls <-to_list(for (val in unlist(recursos_CB['Link al recurso'])) if (is.na(val)) 'No tenemos la URL' else paste("<a href=",val,"target=_blank >","Ir al recurso","</a>"))
 
 
 unlist(urls)
