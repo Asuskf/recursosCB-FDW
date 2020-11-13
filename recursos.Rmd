@@ -16,7 +16,7 @@ recursos_CB <- bind_rows(recursos_CB_EC, recursos_CB_HN, recursos_CB_SV)
 
 ```{r, echo = FALSE, message=FALSE, warning=FALSE}
 urls <-to_list(for (val in unlist(recursos_CB['Link al recurso'])) 
-  if (is.na(val)) 'Pronto colocaremos la URL' else paste("<a href=",val,"target=_parent>","Ir al recurso","</a>"))
+  if (is.na(val)) 'Pronto colocaremos la URL' else paste("<a href=",val,"target=_blank _parent>","Ir al recurso","</a>"))
 
 
 recursos_CB$'Link al recurso'=unlist(urls)
