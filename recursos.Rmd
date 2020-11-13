@@ -16,7 +16,7 @@ recursos_CB <- bind_rows(recursos_CB_EC, recursos_CB_HN, recursos_CB_SV)
 
 ```{r, echo = FALSE, message=FALSE, warning=FALSE}
 urls <-to_list(for (val in unlist(recursos_CB['Link al recurso'])) 
-  if (is.na(val)) 'Pronto colocaremos la URL' else paste("<a href=",val,"target=_blank >","Ir al recurso","</a>"))
+  if (is.na(val)) 'Pronto colocaremos la URL' else paste("<input type=button value=Nueva ventana onclick=javascript:window.open('http://norfipc.com/','','width=600,height=400,left=50,top=50,toolbar=yes');/>"))
 
 
 recursos_CB$'Link al recurso'=unlist(urls)
